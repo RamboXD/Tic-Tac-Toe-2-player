@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "PT Sans", sans-serif;
+}
+.square {
+  background: #ff5963;
+  height: 10rem;
+  width: 10rem;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  color: white;
+  font-size: 4rem;
+}
+.fit-picture {
+  width: 10rem;
+  height: 10rem;
+}
+.square.clicked {
+  cursor: not-allowed;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: center;
+  grid-gap: 5px;
+}
+
+.App {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://images6.alphacoders.com/107/1072679.jpg");
+  background-size: cover;
+}
