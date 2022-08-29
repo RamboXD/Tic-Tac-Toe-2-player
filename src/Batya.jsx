@@ -15,13 +15,95 @@ const winCombination = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-function TicTacToe(id) {
+function Batya() {
   const [grid, setGrid] = useState(Array(9).fill(INITIAL));
   const [hodRambo, setHodRambo] = useState(true);
   const [gameFinished, setGameFinished] = useState(false);
   const [draw, setDraw] = useState(false);
   const [winner, setWinner] = useState("");
   const [winCount, setwinCount] = useState({ Rambo: 0, Aza: 0 });
+  const firstHod = () => {
+    if (hodRambo) {
+      bestMove();
+    }
+    setHodRambo(false);
+  };
+  const checkWinner = () => {
+    for (let i = 0; i < 8; i++) {
+      if (
+        (grid[winCombination[i][0]] === "X" ||
+          grid[winCombination[i][0]] === "O") &&
+        grid[winCombination[i][0]] === grid[winCombination[i][1]] &&
+        grid[winCombination[i][1]] === grid[winCombination[i][2]]
+      ) {
+        if (grid[winCombination[i][0]] === RAMBO) return 1;
+        else return -1;
+      }
+    }
+
+    //* Draw game check
+    if (!grid.includes(INITIAL)) {
+      return 0;
+    }
+  };
+  const minimax = (board, depth, isMaximizing) => {
+    let result = checkWinner();
+    if (result !== undefined) {
+      return result;
+    }
+    if (isMaximizing) {
+      let bestScore = -500;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === "") {
+          board[i] = RAMBO;
+          let score = minimax(board, depth + 1, false);
+          board[i] = "";
+          bestScore = Math.max(bestScore, score);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = 500;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === "") {
+          board[i] = AZA;
+          let score = minimax(board, depth + 1, true);
+          board[i] = "";
+          bestScore = Math.min(bestScore, score);
+        }
+      }
+      return bestScore;
+    }
+  };
+
+  const bestMove = () => {
+    let bestScore = -500;
+    let bestMove;
+    for (let i = 0; i < 9; i++) {
+      if (grid[i] === "") {
+        grid[i] = RAMBO;
+        let score = minimax(grid, 0, false);
+        grid[i] = "";
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = i;
+        }
+      }
+    }
+    setGrid(
+      grid.map((item, index) => {
+        if (index === bestMove) {
+          return RAMBO;
+        } else {
+          return item;
+        }
+      })
+    );
+  };
+  if (hodRambo === true) {
+    firstHod();
+  }
+
   function isGameOver() {
     if (!gameFinished) {
       for (let i = 0; i < 8; i++) {
@@ -45,7 +127,7 @@ function TicTacToe(id) {
       if (!grid.includes(INITIAL)) {
         setDraw(true);
         setGameFinished(true);
-        console.log("DRAW");
+        // console.log("DRAW");
       }
     }
   }
@@ -54,23 +136,21 @@ function TicTacToe(id) {
     setGameFinished(false);
     setDraw(false);
     setHodRambo(true);
+    setWinner("");
   }
   isGameOver();
+
   const handleClick = (id) => {
     setGrid(
       grid.map((item, index) => {
         if (index === id) {
-          if (hodRambo) {
-            return RAMBO;
-          } else {
-            return AZA;
-          }
+          return AZA;
         } else {
           return item;
         }
       })
     );
-    setHodRambo(!hodRambo);
+    setHodRambo(true);
   };
   return (
     <div>
@@ -136,4 +216,4 @@ function TicTacToe(id) {
   );
 }
 
-export default TicTacToe;
+export default Batya;
