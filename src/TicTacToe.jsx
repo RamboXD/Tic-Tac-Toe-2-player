@@ -54,6 +54,7 @@ function TicTacToe(id) {
     setGameFinished(false);
     setDraw(false);
     setHodRambo(true);
+    setWinner("");
   }
   isGameOver();
   const handleClick = (id) => {
